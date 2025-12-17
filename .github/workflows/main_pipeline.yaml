@@ -27,8 +27,10 @@ jobs:
         uses: azure/setup-helm@v3
 
       - name: deploy helm chart
-        run: helm install rick-morty ./rick-morty 
-
+        run: |
+          helm install rick-morty ./rick-morty 
+          sleep 15
+          
       - name: verify deployment
         run: | 
           kubectl port-forward svc/rick-morty 8080:8080 
