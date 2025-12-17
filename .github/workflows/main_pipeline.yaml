@@ -21,7 +21,7 @@ jobs:
         run: docker build -t rick-morty:latest .
 
       - name: load image to kind
-        run: kind load docker-image rick-morty:latest --name kind-chart-testing
+        run: kind load docker-image rick-morty:latest --name chart-testing
 
       - name: install helm
         uses: azure/setup-helm@v3
