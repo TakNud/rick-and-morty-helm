@@ -14,11 +14,14 @@ jobs:
       - name: install cluster
         uses: helm/kind-action@v1
       
+      - name: check cluster
+        run: kind get clusters
+
       - name: build image
         run: docker build -t rick-morty:latest .
 
       - name: load image to kind
-        run: kind load docker-image rick-morty:latest
+        run: kind load docker-image rick-morty:latest --name kind-chart-testing
 
       - name: install helm
         uses: azure/setup-helm@v3
