@@ -1,0 +1,36 @@
+name: main_pipeline
+on: 
+  push:
+    branches:
+      - main
+      
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+
+      - name: install cluster
+        uses: helm/kind-action@v1
+      
+      - name: build image
+        run: docker build -t rick-morty:latest .
+
+      - name: load image to kind
+        run: kind load docker-image rick-morty:latest
+
+      - name: install helm
+        uses: azure/setup-helm@v3
+
+      - name: deploy helm chart
+        run: helm install rick-morty ./rick-morty 
+
+      - name: verify deployment
+        run: | 
+          kubectl port-forward svc/rick-morty 8080:8080 
+          sleep 5
+          curl http://localhost:8080/healthcheck
+
+
+
